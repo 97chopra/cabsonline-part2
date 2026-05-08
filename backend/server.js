@@ -32,9 +32,9 @@ app.get('/api/bookings', (req, res) => {
 
 // Create a booking
 app.post('/api/bookings', (req, res) => {
-  const { booking_ref, cname, phone, snumber, stname, pickup_date, pickup_time } = req.body;
-  const sql = `INSERT INTO bookings (booking_ref, cname, phone, snumber, stname, pickup_date, pickup_time) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-  db.query(sql, [booking_ref, cname, phone, snumber, stname, pickup_date, pickup_time], (err, result) => {
+  const { booking_ref, cname, phone, snumber, stname, sbname, dsbname, pickup_date, pickup_time } = req.body;
+  const sql = `INSERT INTO bookings (booking_ref, cname, phone, snumber, stname, sbname, dsbname, pickup_date, pickup_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  db.query(sql, [booking_ref, cname, phone, snumber, stname, sbname, dsbname, pickup_date, pickup_time], (err, result) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json({ message: 'Booking created!', id: result.insertId });
   });
