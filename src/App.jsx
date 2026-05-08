@@ -3,6 +3,7 @@ import BookingForm from './BookingForm'
 import BookingTracker from './BookingTracker'
 import DriverDashboard from './DriverDashboard'
 import './App.css'
+import CustomerReview from './CustomerReview'
 
 function NavBar() {
   const location = useLocation()
@@ -10,6 +11,7 @@ function NavBar() {
     { path: '/', label: '🚕 Book a Cab' },
     { path: '/track', label: '📍 Track Booking' },
     { path: '/driver', label: '🚗 Driver Dashboard' },
+    { path: '/reviews', label: '⭐ Customer Reviews' }
   ]
   return (
     <nav style={styles.nav}>
@@ -38,6 +40,7 @@ function App() {
             <Route path="/" element={<BookingForm />} />
             <Route path="/track" element={<BookingTracker />} />
             <Route path="/driver" element={<DriverDashboard />} />
+            <Route path="/reviews" element={<CustomerReview />} />
           </Routes>
         </div>
         <footer style={styles.footer}>

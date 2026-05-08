@@ -26,9 +26,10 @@ db.connect((err) => {
 app.get('/api/bookings', (req, res) => {
   db.query('SELECT * FROM bookings', (err, results) => {
     if (err) {
-  console.error('SQL Error:', err.message);
-  return res.status(500).json({ error: err.message });
-  }
+      console.error('SQL Error:', err.message);
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(results);
   });
 });
 
@@ -57,6 +58,24 @@ app.put('/api/bookings/:ref/status', (req, res) => {
   db.query('UPDATE bookings SET status = ? WHERE booking_ref = ?', [status, req.params.ref], (err) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json({ message: 'Status updated!' });
+  });
+});
+
+// Get all reviews
+app.get('/api/reviews', (req, res) => {
+  db.query('SELECT * FROM reviews ORDER BY review_datetime DESC', (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
+});
+
+// Submit a review
+app.post('/api/reviews', (req, res) => {
+  const { booking_ref, cname, rating, comment } = req.body;
+  const sql = `INSERT INTO reviews (booking_ref, cname, rating, comment) VALUES (?, ?, ?, ?)`;
+  db.query(sql, [booking_ref, cname, rating, comment], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ message: 'Review submitted!', id: result.insertId });
   });
 });
 
