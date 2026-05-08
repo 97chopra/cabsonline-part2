@@ -5,7 +5,7 @@ import axios from 'axios'
 function BookingForm() {
   const [form, setForm] = useState({
     cname: '', phone: '', snumber: '', stname: '',
-    pickup_date: '', pickup_time: ''
+    pickup_date: '', pickup_time: '', sbname: '', dsbname: ''
   })
   const [address, setAddress] = useState('')
   const [submitted, setSubmitted] = useState(false)
@@ -62,9 +62,13 @@ function BookingForm() {
               <span style={styles.detailLabel}>Address</span>
               <span style={styles.detailValue}>{address}</span>
             </div>
+            <div style={styles.detailItem}>
+            <span style={styles.detailLabel}>Destination Suburb</span>
+            <span style={styles.detailValue}>{form.dsbname || 'Not specified'}</span>
+           </div>
           </div>
           <p style={styles.saveNote}>💡 Save your reference number to track your booking</p>
-          <MapView address={address} />
+          <MapView address={address} suburb={form.sbname} />
           <button style={styles.btnSecondary} onClick={() => setSubmitted(false)}>
             Make Another Booking
           </button>
@@ -105,6 +109,14 @@ function BookingForm() {
               <label style={styles.label}>Pickup Time *</label>
               <input style={styles.input} name="pickup_time" type="time" onChange={handleChange} required />
             </div>
+            <div style={styles.field}>
+            <label style={styles.label}>Pickup Suburb</label>
+            <input style={styles.input} name="sbname" placeholder="e.g. Auckland CBD" onChange={handleChange} />
+            </div>
+           <div style={styles.field}>
+           <label style={styles.label}>Destination Suburb</label>
+           <input style={styles.input} name="dsbname" placeholder="e.g. Northcote" onChange={handleChange} />
+           </div>
           </div>
           <button style={styles.btn} type="submit">Book Now 🚕</button>
         </form>

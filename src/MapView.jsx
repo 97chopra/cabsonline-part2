@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 
-// Fix leaflet marker icon issue
 delete L.Icon.Default.prototype._getIconUrl
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
@@ -11,12 +10,24 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 })
 
-function MapView({ address }) {
-  const [position, setPosition] = useState([-36.8485, 174.7633]) // Default Auckland
+// This component moves the map when position changes
+function MoveMap({ position }) {
+  const map = useMap()
+  useEffect(() => {
+    map.setView(position, 15)
+  }, [position])
+  return null
+}
+
+function MapView({ address, suburb }) {
+  const [position, setPosition] = useState([-36.8485, 174.7633])
 
   useEffect(() => {
     if (address) {
-      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address + ', Auckland, New Zealand')}`)
+      const searchQuery = suburb
+        ? `${address}, ${suburb}, New Zealand`
+        : `${address}, New Zealand`
+      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}&limit=1`)
         .then(res => res.json())
         .then(data => {
           if (data && data.length > 0) {
@@ -24,18 +35,19 @@ function MapView({ address }) {
           }
         })
     }
-  }, [address])
+  }, [address, suburb])
 
   return (
     <div style={{ marginTop: '1rem', borderRadius: '12px', overflow: 'hidden' }}>
-      <h3>📍 Pickup Location</h3>
+      <h3 style={{ color: '#f7c948', marginBottom: '0.5rem' }}>📍 Pickup Location</h3>
       <MapContainer center={position} zoom={15} style={{ height: '300px', width: '100%' }}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='© OpenStreetMap contributors'
         />
+        <MoveMap position={position} />
         <Marker position={position}>
-          <Popup>{address || 'Pickup Location'}</Popup>
+          <Popup>{address}{suburb ? `, ${suburb}` : ''}</Popup>
         </Marker>
       </MapContainer>
     </div>
