@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import MapView from './MapView'
 import axios from 'axios'
+import { calculateFare } from './fareCalculator'
 
 function BookingForm() {
   const [form, setForm] = useState({
@@ -11,6 +12,7 @@ function BookingForm() {
   const [submitted, setSubmitted] = useState(false)
   const [bookingRef, setBookingRef] = useState('')
   const [error, setError] = useState('')
+  const [fare, setFare] = useState(null)
 
   const generateRef = () => 'CB' + Math.floor(Math.random() * 100000)
 
@@ -25,6 +27,8 @@ function BookingForm() {
     const ref = generateRef()
     const fullAddress = `${form.snumber} ${form.stname}`
     setAddress(fullAddress)
+    const fareResult = calculateFare(form.sbname, form.dsbname)
+    setFare(fareResult)
     try {
       await axios.post('http://localhost:5000/api/bookings', {
         ...form, booking_ref: ref
@@ -68,6 +72,13 @@ function BookingForm() {
             <span style={styles.detailValue}>{form.dsbname || 'Not specified'}</span>
            </div>
           </div>
+          {fare && (
+         <div style={styles.fareBox}>
+         <p style={styles.fareLabel}>Estimated Fare</p>
+         <p style={styles.fareAmount}>${fare.fare}</p>
+         <p style={styles.fareBreakdown}>{fare.breakdown}</p>
+         </div>
+        )}
           <p style={styles.saveNote}>💡 Save your reference number to track your booking</p>
           <MapView address={address} suburb={form.sbname} />
           <button style={styles.btnSecondary} onClick={() => setSubmitted(false)}>
@@ -148,7 +159,11 @@ const styles = {
   detailLabel: { color: '#9090b0', fontSize: '0.8rem' },
   detailValue: { color: '#fff', fontWeight: '500' },
   saveNote: { color: '#9090b0', fontSize: '0.85rem', marginBottom: '1.5rem' },
-  btnSecondary: { padding: '0.75rem 2rem', background: 'transparent', color: '#f7c948', border: '1px solid #f7c948', borderRadius: '8px', cursor: 'pointer', fontSize: '0.95rem' }
+  btnSecondary: { padding: '0.75rem 2rem', background: 'transparent', color: '#f7c948', border: '1px solid #f7c948', borderRadius: '8px', cursor: 'pointer', fontSize: '0.95rem' },
+  fareBox: { background: '#0d0d1a', border: '1px solid #51cf66', borderRadius: '12px', padding: '1rem', marginBottom: '1.5rem' },
+  fareLabel: { color: '#9090b0', fontSize: '0.85rem', marginBottom: '0.3rem' },
+  fareAmount: { color: '#51cf66', fontSize: '2rem', fontWeight: 'bold', marginBottom: '0.3rem' },
+ fareBreakdown: { color: '#9090b0', fontSize: '0.8rem' },
 }
 
 export default BookingForm
