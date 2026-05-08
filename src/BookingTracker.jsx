@@ -16,7 +16,7 @@ function BookingTracker() {
     setError('')
     setBooking(null)
     try {
-      const res = await axios.get(`http://localhost:5000/api/bookings/${ref}`)
+      const res = await axios.get(`http://localhost:5000/api/bookings/${ref.trim()}`)
       setBooking(res.data)
     } catch {
       setError('No booking found with that reference number.')

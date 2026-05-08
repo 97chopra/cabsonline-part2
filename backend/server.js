@@ -25,8 +25,10 @@ db.connect((err) => {
 // Get all bookings
 app.get('/api/bookings', (req, res) => {
   db.query('SELECT * FROM bookings', (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(results);
+    if (err) {
+  console.error('SQL Error:', err.message);
+  return res.status(500).json({ error: err.message });
+  }
   });
 });
 

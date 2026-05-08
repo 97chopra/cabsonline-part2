@@ -15,8 +15,9 @@ function BookingForm() {
   const generateRef = () => 'CB' + Math.floor(Math.random() * 100000)
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
+  const { name, value } = e.target
+  setForm(prev => ({ ...prev, [name]: value }))
+}
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -111,11 +112,11 @@ function BookingForm() {
             </div>
             <div style={styles.field}>
             <label style={styles.label}>Pickup Suburb</label>
-            <input style={styles.input} name="sbname" placeholder="e.g. Auckland CBD" onChange={handleChange} />
+            <input style={styles.input} name="sbname" placeholder="e.g. Auckland CBD" value={form.sbname} onChange={handleChange} />
             </div>
            <div style={styles.field}>
            <label style={styles.label}>Destination Suburb</label>
-           <input style={styles.input} name="dsbname" placeholder="e.g. Northcote" onChange={handleChange} />
+           <input style={styles.input} name="dsbname" placeholder="e.g. Northcote" value={form.dsbname} onChange={handleChange} />
            </div>
           </div>
           <button style={styles.btn} type="submit">Book Now 🚕</button>
