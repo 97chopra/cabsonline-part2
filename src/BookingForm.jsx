@@ -2,6 +2,7 @@ import { useState } from 'react'
 import MapView from './MapView'
 import axios from 'axios'
 import { calculateFare } from './fareCalculator'
+import PaymentForm from './PaymentForm'
 
 function BookingForm() {
   const [form, setForm] = useState({
@@ -13,6 +14,7 @@ function BookingForm() {
   const [bookingRef, setBookingRef] = useState('')
   const [error, setError] = useState('')
   const [fare, setFare] = useState(null)
+  const [showPayment, setShowPayment] = useState(false)
 
   const generateRef = () => 'CB' + Math.floor(Math.random() * 100000)
 
@@ -79,6 +81,18 @@ function BookingForm() {
          <p style={styles.fareBreakdown}>{fare.breakdown}</p>
          </div>
         )}
+        {fare && (
+       <button style={styles.payBtn} onClick={() => setShowPayment(true)}>
+      💳 Proceed to Payment — ${fare.fare}
+      </button>
+)}
+   {showPayment && (
+    <PaymentForm
+    fare={fare.fare}
+    bookingRef={bookingRef}
+    onClose={() => setShowPayment(false)}
+  />
+)}
           <p style={styles.saveNote}>💡 Save your reference number to track your booking</p>
           <MapView address={address} suburb={form.sbname} />
           <button style={styles.btnSecondary} onClick={() => setSubmitted(false)}>
@@ -164,6 +178,7 @@ const styles = {
   fareLabel: { color: '#9090b0', fontSize: '0.85rem', marginBottom: '0.3rem' },
   fareAmount: { color: '#51cf66', fontSize: '2rem', fontWeight: 'bold', marginBottom: '0.3rem' },
  fareBreakdown: { color: '#9090b0', fontSize: '0.8rem' },
+ payBtn: { width: '100%', padding: '0.9rem', background: 'linear-gradient(135deg, #51cf66, #2ecc71)', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '1rem', fontWeight: 'bold', cursor: 'pointer', marginBottom: '1rem' },
 }
 
 export default BookingForm
