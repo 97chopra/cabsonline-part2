@@ -76,7 +76,7 @@ function BookingForm() {
   return (
     <div style={styles.container}>
       <h2 style={styles.title}>🚕 Book a Cab</h2>
-      <p style={styles.subtitle}>Fill in your details to book a cab in Auckland</p>
+      <p style={styles.subtitle}>Fill in your details to book a cab in Auckland and surrounding areas</p>
       {error && <p style={styles.error}>{error}</p>}
       <div style={styles.formCard}>
         <form onSubmit={handleSubmit}>
