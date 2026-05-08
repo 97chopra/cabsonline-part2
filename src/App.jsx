@@ -41,7 +41,7 @@ function App() {
           </Routes>
         </div>
         <footer style={styles.footer}>
-          © 2026 CabsOnline — React + Node.js
+          © 2026 CabsOnline | Auckland, New Zealand | contact@cabsonline.co.nz
         </footer>
       </div>
     </Router>
